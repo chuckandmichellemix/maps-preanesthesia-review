@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Anesthesia Questionnaire | MAPS Clinical Forms</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://maps-preanesthesia-review.pplx.app/">
+<meta property="og:title" content="Pre-Anesthesia Questionnaire | MAPS Clinical Forms">
+<meta property="og:description" content="Internal review draft — MAPS Mobile Anesthesia pre-anesthesia medical history questionnaire.">
+<meta property="og:image" content="https://maps-preanesthesia-review.pplx.app/assets/favicon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pre-Anesthesia Questionnaire | MAPS Clinical Forms">
+<meta name="twitter:description" content="Internal review draft — MAPS Mobile Anesthesia pre-anesthesia medical history questionnaire.">
+<meta name="twitter:image" content="https://maps-preanesthesia-review.pplx.app/assets/favicon-512.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand" aria-label="MAPS Mobile Anesthesia home">
+      <img class="brand__mark" src="assets/maps-icon-badge.png" alt="MAPS Mobile Anesthesia logo" width="34" height="34">
+      <span class="brand__text">
+        <span class="brand__name">MAPS Clinical Forms</span>
+        <span class="brand__tag">In the Mix Anesthesia</span>
+      </span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode"></button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="notice" style="margin-bottom: var(--space-6);">
+    <strong>Internal review draft.</strong> This is a working copy of the Pre-Anesthesia Questionnaire for team review only — flag anything you'd add, remove, or reword. Not yet the version shared with patients.
+  </div>
+
+  <div class="intro">
+    <span class="intro__eyebrow">Pre-Anesthesia Questionnaire</span>
+    <h1 class="intro__title">Pre-Anesthesia Medical History</h1>
+    <p class="intro__desc">This information helps your anesthesia provider plan safely for your procedure. Please answer every question as accurately as possible.</p>
+  </div>
+
+  <form data-local-form novalidate id="paq-form">
+
+    <div class="section">
+      <h2 class="section__title">Anthropometrics</h2>
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label" for="height">Current Height <span class="req">*</span></label>
+          <input class="input" type="text" id="height" name="height" placeholder="e.g., 5 ft 8 in" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="weight">Current Weight <span class="req">*</span></label>
+          <input class="input" type="text" id="weight" name="weight" placeholder="e.g., 165 lb" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Anesthesia &amp; Family History</h2>
+
+      <div class="field">
+        <label class="field__label">Problems with Anesthesia in the Past? <span class="req">*</span></label>
+        <div class="option-group" data-radio-group="anesthesia_problems">
+          <label class="option"><input type="radio" name="anesthesia_problems_past" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="anesthesia_problems_past" value="No" required> No</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label">Family History of Malignant Hyperthermia? <span class="req">*</span></label>
+        <div class="option-group" data-radio-group="mh_history">
+          <label class="option"><input type="radio" name="family_history_mh" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="family_history_mh" value="No" required> No</label>
+        </div>
+      </div>
+
+      <div class="conditional" id="anesthesia-family-details" hidden>
+        <label class="field__label" for="anesthesia-family-details-text">Please fill in below if you selected YES to any of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="anesthesia-family-details-text" name="anesthesia_family_details" data-conditional-required="true"></textarea>
+      </div>
+
+      <div class="field" style="margin-top: var(--space-6)">
+        <label class="field__label">Evaluated by a primary care provider in the last year? <span class="req">*</span></label>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="evaluated_by_pcp_last_year" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="evaluated_by_pcp_last_year" value="No" required> No</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Women Only</h2>
+      <p class="section__subtitle">If not applicable, leave blank.</p>
+      <div class="option-group option-group--stack">
+        <label class="option"><input type="radio" name="women_only_status" value="Pregnant or Chance of Pregnancy"> Pregnant or Chance of Pregnancy</label>
+        <label class="option"><input type="radio" name="women_only_status" value="Breastfeeding"> Breastfeeding</label>
+        <label class="option"><input type="radio" name="women_only_status" value="Menopause/Hysterectomy"> Menopause/Hysterectomy</label>
+      </div>
+    </div>
+
+    <h2 style="font-size: var(--text-lg); margin: var(--space-8) 0 var(--space-2)">Past Medical History</h2>
+    <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-5)">For each category, check every condition that applies, or "None of the above" if none apply.</p>
+
+    <div class="section">
+      <h2 class="section__title">Neurological History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="neurological-details">
+        <label class="checklist-item" for="neurological-epilepsy_seizures">
+          <input type="checkbox" id="neurological-epilepsy_seizures" name="neurological_options" value="Epilepsy/Seizures">
+          <span>Epilepsy/Seizures</span>
+        </label>
+        <label class="checklist-item" for="neurological-stroke_tia">
+          <input type="checkbox" id="neurological-stroke_tia" name="neurological_options" value="Stroke/TIA">
+          <span>Stroke/TIA</span>
+        </label>
+        <label class="checklist-item" for="neurological-migraines">
+          <input type="checkbox" id="neurological-migraines" name="neurological_options" value="Migraines">
+          <span>Migraines</span>
+        </label>
+        <label class="checklist-item" for="neurological-alzheimers_dementia">
+          <input type="checkbox" id="neurological-alzheimers_dementia" name="neurological_options" value="Alzheimer's/Dementia">
+          <span>Alzheimer's/Dementia</span>
+        </label>
+        <label class="checklist-item" for="neurological-ms">
+          <input type="checkbox" id="neurological-ms" name="neurological_options" value="MS">
+          <span>MS</span>
+        </label>
+        <label class="checklist-item" for="neurological-muscular_dystrophy">
+          <input type="checkbox" id="neurological-muscular_dystrophy" name="neurological_options" value="Muscular Dystrophy">
+          <span>Muscular Dystrophy</span>
+        </label>
+        <label class="checklist-item" for="neurological-dizziness_fainting_loc">
+          <input type="checkbox" id="neurological-dizziness_fainting_loc" name="neurological_options" value="Dizziness/Fainting/LOC">
+          <span>Dizziness/Fainting/LOC</span>
+        </label>
+        <label class="checklist-item" for="neurological-numbness_tingling">
+          <input type="checkbox" id="neurological-numbness_tingling" name="neurological_options" value="Numbness/Tingling">
+          <span>Numbness/Tingling</span>
+        </label>
+        <label class="checklist-item" for="neurological-facial_leg_arm_weakness">
+          <input type="checkbox" id="neurological-facial_leg_arm_weakness" name="neurological_options" value="Facial/Leg/Arm Weakness">
+          <span>Facial/Leg/Arm Weakness</span>
+        </label>
+        <label class="checklist-item" for="neurological-chronic_pain">
+          <input type="checkbox" id="neurological-chronic_pain" name="neurological_options" value="Chronic Pain">
+          <span>Chronic Pain</span>
+        </label>
+        <label class="checklist-item" for="neurological-autism">
+          <input type="checkbox" id="neurological-autism" name="neurological_options" value="Autism">
+          <span>Autism</span>
+        </label>
+        <label class="checklist-item" for="neurological-anxiety_panic_attacks">
+          <input type="checkbox" id="neurological-anxiety_panic_attacks" name="neurological_options" value="Anxiety/Panic Attacks">
+          <span>Anxiety/Panic Attacks</span>
+        </label>
+        <label class="checklist-item" for="neurological-depression">
+          <input type="checkbox" id="neurological-depression" name="neurological_options" value="Depression">
+          <span>Depression</span>
+        </label>
+        <label class="checklist-item" for="neurological-ptsd">
+          <input type="checkbox" id="neurological-ptsd" name="neurological_options" value="PTSD">
+          <span>PTSD</span>
+        </label>
+        <label class="checklist-item" for="neurological-adhd">
+          <input type="checkbox" id="neurological-adhd" name="neurological_options" value="ADHD">
+          <span>ADHD</span>
+        </label>
+        <label class="checklist-item" for="neurological-suicidal_thoughts">
+          <input type="checkbox" id="neurological-suicidal_thoughts" name="neurological_options" value="Suicidal Thoughts">
+          <span>Suicidal Thoughts</span>
+        </label>
+        <label class="checklist-item" for="neurological-bi-polar_disorder">
+          <input type="checkbox" id="neurological-bi-polar_disorder" name="neurological_options" value="Bi-Polar Disorder">
+          <span>Bi-Polar Disorder</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="neurological-none">
+          <input type="checkbox" id="neurological-none" name="neurological_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="neurological-details" hidden>
+        <label class="field__label" for="neurological-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="neurological-details-text" name="neurological_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Eyes / Ears / Nose / Throat <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="eent-details">
+        <label class="checklist-item" for="eent-blurred_vision">
+          <input type="checkbox" id="eent-blurred_vision" name="eent_options" value="Blurred Vision">
+          <span>Blurred Vision</span>
+        </label>
+        <label class="checklist-item" for="eent-cataracts">
+          <input type="checkbox" id="eent-cataracts" name="eent_options" value="Cataract(s)">
+          <span>Cataract(s)</span>
+        </label>
+        <label class="checklist-item" for="eent-glaucoma">
+          <input type="checkbox" id="eent-glaucoma" name="eent_options" value="Glaucoma">
+          <span>Glaucoma</span>
+        </label>
+        <label class="checklist-item" for="eent-macular_degeneration">
+          <input type="checkbox" id="eent-macular_degeneration" name="eent_options" value="Macular Degeneration">
+          <span>Macular Degeneration</span>
+        </label>
+        <label class="checklist-item" for="eent-tmj">
+          <input type="checkbox" id="eent-tmj" name="eent_options" value="TMJ">
+          <span>TMJ</span>
+        </label>
+        <label class="checklist-item" for="eent-sinus_problems_deviated_septum">
+          <input type="checkbox" id="eent-sinus_problems_deviated_septum" name="eent_options" value="Sinus Problems/Deviated Septum">
+          <span>Sinus Problems/Deviated Septum</span>
+        </label>
+        <label class="checklist-item" for="eent-loss_of_hearing">
+          <input type="checkbox" id="eent-loss_of_hearing" name="eent_options" value="Loss of Hearing">
+          <span>Loss of Hearing</span>
+        </label>
+        <label class="checklist-item" for="eent-vocal_cord_injury_paralysis_history">
+          <input type="checkbox" id="eent-vocal_cord_injury_paralysis_history" name="eent_options" value="Vocal Cord Injury/Paralysis history">
+          <span>Vocal Cord Injury/Paralysis history</span>
+        </label>
+        <label class="checklist-item" for="eent-dry_eye">
+          <input type="checkbox" id="eent-dry_eye" name="eent_options" value="Dry Eye">
+          <span>Dry Eye</span>
+        </label>
+        <label class="checklist-item" for="eent-double_vision">
+          <input type="checkbox" id="eent-double_vision" name="eent_options" value="Double Vision">
+          <span>Double Vision</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="eent-none">
+          <input type="checkbox" id="eent-none" name="eent_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="eent-details" hidden>
+        <label class="field__label" for="eent-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="eent-details-text" name="eent_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Pulmonary History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="pulmonary-details">
+        <label class="checklist-item" for="pulmonary-home_oxygen_use">
+          <input type="checkbox" id="pulmonary-home_oxygen_use" name="pulmonary_options" value="Home Oxygen Use">
+          <span>Home Oxygen Use</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-copd">
+          <input type="checkbox" id="pulmonary-copd" name="pulmonary_options" value="COPD">
+          <span>COPD</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-recent_uri">
+          <input type="checkbox" id="pulmonary-recent_uri" name="pulmonary_options" value="Recent URI">
+          <span>Recent URI</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-tb">
+          <input type="checkbox" id="pulmonary-tb" name="pulmonary_options" value="TB">
+          <span>TB</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-snoring_sleep_apnea">
+          <input type="checkbox" id="pulmonary-snoring_sleep_apnea" name="pulmonary_options" value="Snoring/Sleep Apnea">
+          <span>Snoring/Sleep Apnea</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-cpap_use">
+          <input type="checkbox" id="pulmonary-cpap_use" name="pulmonary_options" value="CPAP Use">
+          <span>CPAP Use</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-asthma">
+          <input type="checkbox" id="pulmonary-asthma" name="pulmonary_options" value="Asthma">
+          <span>Asthma</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-cystic_fibrosis">
+          <input type="checkbox" id="pulmonary-cystic_fibrosis" name="pulmonary_options" value="Cystic Fibrosis">
+          <span>Cystic Fibrosis</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-pulmonary_fibrosis">
+          <input type="checkbox" id="pulmonary-pulmonary_fibrosis" name="pulmonary_options" value="Pulmonary Fibrosis">
+          <span>Pulmonary Fibrosis</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-sarcoidosis">
+          <input type="checkbox" id="pulmonary-sarcoidosis" name="pulmonary_options" value="Sarcoidosis">
+          <span>Sarcoidosis</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-pulmonary_hypertension">
+          <input type="checkbox" id="pulmonary-pulmonary_hypertension" name="pulmonary_options" value="Pulmonary Hypertension">
+          <span>Pulmonary Hypertension</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-sob">
+          <input type="checkbox" id="pulmonary-sob" name="pulmonary_options" value="SOB">
+          <span>SOB</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="pulmonary-none">
+          <input type="checkbox" id="pulmonary-none" name="pulmonary_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="pulmonary-details" hidden>
+        <label class="field__label" for="pulmonary-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="pulmonary-details-text" name="pulmonary_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Cardiovascular History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="cardiovascular-details">
+        <label class="checklist-item" for="cardiovascular-cad">
+          <input type="checkbox" id="cardiovascular-cad" name="cardiovascular_options" value="CAD">
+          <span>CAD</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-cabg">
+          <input type="checkbox" id="cardiovascular-cabg" name="cardiovascular_options" value="CABG">
+          <span>CABG</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-coronary_stents_intervention">
+          <input type="checkbox" id="cardiovascular-coronary_stents_intervention" name="cardiovascular_options" value="Coronary Stents/Intervention">
+          <span>Coronary Stents/Intervention</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-heart_valve_problems">
+          <input type="checkbox" id="cardiovascular-heart_valve_problems" name="cardiovascular_options" value="Heart Valve Problems">
+          <span>Heart Valve Problems</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-heart_valve_replacement">
+          <input type="checkbox" id="cardiovascular-heart_valve_replacement" name="cardiovascular_options" value="Heart Valve Replacement">
+          <span>Heart Valve Replacement</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-chf">
+          <input type="checkbox" id="cardiovascular-chf" name="cardiovascular_options" value="CHF">
+          <span>CHF</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-irregular_heart_beat">
+          <input type="checkbox" id="cardiovascular-irregular_heart_beat" name="cardiovascular_options" value="Irregular Heart Beat">
+          <span>Irregular Heart Beat</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-history_of_heart_attack">
+          <input type="checkbox" id="cardiovascular-history_of_heart_attack" name="cardiovascular_options" value="History of Heart Attack">
+          <span>History of Heart Attack</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-pacemaker">
+          <input type="checkbox" id="cardiovascular-pacemaker" name="cardiovascular_options" value="Pacemaker">
+          <span>Pacemaker</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-defibrillator">
+          <input type="checkbox" id="cardiovascular-defibrillator" name="cardiovascular_options" value="Defibrillator">
+          <span>Defibrillator</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-high_cholesterol">
+          <input type="checkbox" id="cardiovascular-high_cholesterol" name="cardiovascular_options" value="High Cholesterol">
+          <span>High Cholesterol</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-high_blood_pressure">
+          <input type="checkbox" id="cardiovascular-high_blood_pressure" name="cardiovascular_options" value="High Blood Pressure">
+          <span>High Blood Pressure</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-chest_pain_sob_during_activity">
+          <input type="checkbox" id="cardiovascular-chest_pain_sob_during_activity" name="cardiovascular_options" value="Chest Pain/SOB During Activity">
+          <span>Chest Pain/SOB During Activity</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="cardiovascular-none">
+          <input type="checkbox" id="cardiovascular-none" name="cardiovascular_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="cardiovascular-details" hidden>
+        <label class="field__label" for="cardiovascular-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="cardiovascular-details-text" name="cardiovascular_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Endocrine History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="endocrine-details">
+        <label class="checklist-item" for="endocrine-type_1_diabetes">
+          <input type="checkbox" id="endocrine-type_1_diabetes" name="endocrine_options" value="Type 1 Diabetes">
+          <span>Type 1 Diabetes</span>
+        </label>
+        <label class="checklist-item" for="endocrine-type_2_diabetes">
+          <input type="checkbox" id="endocrine-type_2_diabetes" name="endocrine_options" value="Type 2 Diabetes">
+          <span>Type 2 Diabetes</span>
+        </label>
+        <label class="checklist-item" for="endocrine-hypothyroidism">
+          <input type="checkbox" id="endocrine-hypothyroidism" name="endocrine_options" value="Hypothyroidism">
+          <span>Hypothyroidism</span>
+        </label>
+        <label class="checklist-item" for="endocrine-hyperthyroidism">
+          <input type="checkbox" id="endocrine-hyperthyroidism" name="endocrine_options" value="Hyperthyroidism">
+          <span>Hyperthyroidism</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="endocrine-none">
+          <input type="checkbox" id="endocrine-none" name="endocrine_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="endocrine-details" hidden>
+        <label class="field__label" for="endocrine-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="endocrine-details-text" name="endocrine_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Hepatic (Liver) History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="hepatic-details">
+        <label class="checklist-item" for="hepatic-liver_disease">
+          <input type="checkbox" id="hepatic-liver_disease" name="hepatic_options" value="Liver Disease">
+          <span>Liver Disease</span>
+        </label>
+        <label class="checklist-item" for="hepatic-cirrhosis">
+          <input type="checkbox" id="hepatic-cirrhosis" name="hepatic_options" value="Cirrhosis">
+          <span>Cirrhosis</span>
+        </label>
+        <label class="checklist-item" for="hepatic-hepatitis_indicate_type">
+          <input type="checkbox" id="hepatic-hepatitis_indicate_type" name="hepatic_options" value="Hepatitis (indicate type)" data-reveals="hepatitis_type">
+          <span>Hepatitis (indicate type)</span>
+        </label>
+        <div class="subfield" id="hepatitis_type" hidden style="grid-column: 1 / -1;">
+          <label class="field__label" for="hepatitis_type-input">Indicate type</label>
+          <input class="input" type="text" id="hepatitis_type-input" name="hepatitis_type" placeholder="e.g., Type A, B, or C">
+        </div>
+        <label class="checklist-item" for="hepatic-jaundice">
+          <input type="checkbox" id="hepatic-jaundice" name="hepatic_options" value="Jaundice">
+          <span>Jaundice</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="hepatic-none">
+          <input type="checkbox" id="hepatic-none" name="hepatic_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="hepatic-details" hidden>
+        <label class="field__label" for="hepatic-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="hepatic-details-text" name="hepatic_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Renal (Kidney) History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="renal-details">
+        <label class="checklist-item" for="renal-kidney_disease">
+          <input type="checkbox" id="renal-kidney_disease" name="renal_options" value="Kidney Disease">
+          <span>Kidney Disease</span>
+        </label>
+        <label class="checklist-item" for="renal-kidney_stones">
+          <input type="checkbox" id="renal-kidney_stones" name="renal_options" value="Kidney Stones">
+          <span>Kidney Stones</span>
+        </label>
+        <label class="checklist-item" for="renal-bladder_urinary_incontinence">
+          <input type="checkbox" id="renal-bladder_urinary_incontinence" name="renal_options" value="Bladder/Urinary Incontinence">
+          <span>Bladder/Urinary Incontinence</span>
+        </label>
+        <label class="checklist-item" for="renal-kidney_transplant">
+          <input type="checkbox" id="renal-kidney_transplant" name="renal_options" value="Kidney Transplant">
+          <span>Kidney Transplant</span>
+        </label>
+        <label class="checklist-item" for="renal-dialysis_indicate_frequency">
+          <input type="checkbox" id="renal-dialysis_indicate_frequency" name="renal_options" value="Dialysis (indicate frequency)" data-reveals="dialysis_frequency">
+          <span>Dialysis (indicate frequency)</span>
+        </label>
+        <div class="subfield" id="dialysis_frequency" hidden style="grid-column: 1 / -1;">
+          <label class="field__label" for="dialysis_frequency-input">Indicate frequency</label>
+          <input class="input" type="text" id="dialysis_frequency-input" name="dialysis_frequency" placeholder="e.g., 3x per week">
+        </div>
+        <label class="checklist-item checklist-item--none" for="renal-none">
+          <input type="checkbox" id="renal-none" name="renal_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="renal-details" hidden>
+        <label class="field__label" for="renal-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="renal-details-text" name="renal_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Gastrointestinal (GI) History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="gi-details">
+        <label class="checklist-item" for="gi-ulcers">
+          <input type="checkbox" id="gi-ulcers" name="gi_options" value="Ulcers">
+          <span>Ulcers</span>
+        </label>
+        <label class="checklist-item" for="gi-trouble_swallowing">
+          <input type="checkbox" id="gi-trouble_swallowing" name="gi_options" value="Trouble Swallowing">
+          <span>Trouble Swallowing</span>
+        </label>
+        <label class="checklist-item" for="gi-hiatal_hernia">
+          <input type="checkbox" id="gi-hiatal_hernia" name="gi_options" value="Hiatal Hernia">
+          <span>Hiatal Hernia</span>
+        </label>
+        <label class="checklist-item" for="gi-ibs">
+          <input type="checkbox" id="gi-ibs" name="gi_options" value="IBS">
+          <span>IBS</span>
+        </label>
+        <label class="checklist-item" for="gi-crohns_disease">
+          <input type="checkbox" id="gi-crohns_disease" name="gi_options" value="Crohn's Disease">
+          <span>Crohn's Disease</span>
+        </label>
+        <label class="checklist-item" for="gi-gerd_acid_reflux">
+          <input type="checkbox" id="gi-gerd_acid_reflux" name="gi_options" value="GERD/Acid Reflux">
+          <span>GERD/Acid Reflux</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="gi-none">
+          <input type="checkbox" id="gi-none" name="gi_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="gi-details" hidden>
+        <label class="field__label" for="gi-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="gi-details-text" name="gi_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Musculoskeletal History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="musculoskeletal-details">
+        <label class="checklist-item" for="musculoskeletal-rheumatoid_arthritis">
+          <input type="checkbox" id="musculoskeletal-rheumatoid_arthritis" name="musculoskeletal_options" value="Rheumatoid Arthritis">
+          <span>Rheumatoid Arthritis</span>
+        </label>
+        <label class="checklist-item" for="musculoskeletal-osteoarthritis">
+          <input type="checkbox" id="musculoskeletal-osteoarthritis" name="musculoskeletal_options" value="Osteoarthritis">
+          <span>Osteoarthritis</span>
+        </label>
+        <label class="checklist-item" for="musculoskeletal-back_pain">
+          <input type="checkbox" id="musculoskeletal-back_pain" name="musculoskeletal_options" value="Back Pain">
+          <span>Back Pain</span>
+        </label>
+        <label class="checklist-item" for="musculoskeletal-neck_pain">
+          <input type="checkbox" id="musculoskeletal-neck_pain" name="musculoskeletal_options" value="Neck Pain">
+          <span>Neck Pain</span>
+        </label>
+        <label class="checklist-item" for="musculoskeletal-other_muscle_problem_disease">
+          <input type="checkbox" id="musculoskeletal-other_muscle_problem_disease" name="musculoskeletal_options" value="Other Muscle Problem/Disease">
+          <span>Other Muscle Problem/Disease</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="musculoskeletal-none">
+          <input type="checkbox" id="musculoskeletal-none" name="musculoskeletal_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="musculoskeletal-details" hidden>
+        <label class="field__label" for="musculoskeletal-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="musculoskeletal-details-text" name="musculoskeletal_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Hematology/Oncology History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="heme_onc-details">
+        <label class="checklist-item" for="heme_onc-previous_current_cancer">
+          <input type="checkbox" id="heme_onc-previous_current_cancer" name="heme_onc_options" value="Previous/Current Cancer">
+          <span>Previous/Current Cancer</span>
+        </label>
+        <label class="checklist-item" for="heme_onc-blood_clotting_disorder">
+          <input type="checkbox" id="heme_onc-blood_clotting_disorder" name="heme_onc_options" value="Blood Clotting Disorder">
+          <span>Blood Clotting Disorder</span>
+        </label>
+        <label class="checklist-item" for="heme_onc-anemia">
+          <input type="checkbox" id="heme_onc-anemia" name="heme_onc_options" value="Anemia">
+          <span>Anemia</span>
+        </label>
+        <label class="checklist-item" for="heme_onc-dvt">
+          <input type="checkbox" id="heme_onc-dvt" name="heme_onc_options" value="DVT">
+          <span>DVT</span>
+        </label>
+        <label class="checklist-item" for="heme_onc-pulmonary_embolism">
+          <input type="checkbox" id="heme_onc-pulmonary_embolism" name="heme_onc_options" value="Pulmonary Embolism">
+          <span>Pulmonary Embolism</span>
+        </label>
+        <label class="checklist-item" for="heme_onc-sickle_cell">
+          <input type="checkbox" id="heme_onc-sickle_cell" name="heme_onc_options" value="Sickle Cell">
+          <span>Sickle Cell</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="heme_onc-none">
+          <input type="checkbox" id="heme_onc-none" name="heme_onc_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="heme_onc-details" hidden>
+        <label class="field__label" for="heme_onc-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="heme_onc-details-text" name="heme_onc_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Other History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="other_history-details">
+        <label class="checklist-item" for="other_history-hiv">
+          <input type="checkbox" id="other_history-hiv" name="other_history_options" value="HIV">
+          <span>HIV</span>
+        </label>
+        <label class="checklist-item" for="other_history-aids">
+          <input type="checkbox" id="other_history-aids" name="other_history_options" value="AIDS">
+          <span>AIDS</span>
+        </label>
+        <label class="checklist-item" for="other_history-hepatitis_a_b_c">
+          <input type="checkbox" id="other_history-hepatitis_a_b_c" name="other_history_options" value="Hepatitis (A, B, C)">
+          <span>Hepatitis (A, B, C)</span>
+        </label>
+        <label class="checklist-item" for="other_history-mrsa_active">
+          <input type="checkbox" id="other_history-mrsa_active" name="other_history_options" value="MRSA (active)">
+          <span>MRSA (active)</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="other_history-none">
+          <input type="checkbox" id="other_history-none" name="other_history_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="other_history-details" hidden>
+        <label class="field__label" for="other_history-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="other_history-details-text" name="other_history_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">DASI Functional Scoring</h2>
+      <p class="section__subtitle">This section (the Duke Activity Status Index) helps assess your functional capacity for anesthesia safety. Answer Yes or No for each activity.</p>
+
+      <div class="dasi-item" data-dasi-item="self_care">
+        <span class="dasi-item__q">Can you perform self care activities? <span class="dasi-item__eg">e.g. eating, dressing, bathing, using the toilet</span> <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="self_care" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="self_care" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="walk_indoors">
+        <span class="dasi-item__q">Can you walk indoors? <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="walk_indoors" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="walk_indoors" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="walk_1_2_blocks">
+        <span class="dasi-item__q">Can you walk 1–2 blocks on level ground? <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="walk_1_2_blocks" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="walk_1_2_blocks" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="climb_stairs_or_hill">
+        <span class="dasi-item__q">Can you climb a flight of stairs or walk up a hill? <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="climb_stairs_or_hill" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="climb_stairs_or_hill" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="run_short_distance">
+        <span class="dasi-item__q">Can you run a short distance? <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="run_short_distance" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="run_short_distance" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="light_housework">
+        <span class="dasi-item__q">Can you do light work around the house? <span class="dasi-item__eg">e.g. dusting, washing dishes</span> <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="light_housework" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="light_housework" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="moderate_housework">
+        <span class="dasi-item__q">Can you do moderate work around the house? <span class="dasi-item__eg">e.g. vacuuming, sweeping floors, carrying in groceries</span> <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="moderate_housework" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="moderate_housework" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="heavy_housework">
+        <span class="dasi-item__q">Can you perform heavy work around the house? <span class="dasi-item__eg">e.g. scrubbing floors, lifting or moving furniture</span> <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="heavy_housework" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="heavy_housework" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="yard_work">
+        <span class="dasi-item__q">Can you do yard work? <span class="dasi-item__eg">e.g. raking leaves, weeding, pushing a power mower</span> <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="yard_work" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="yard_work" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="sexual_relations">
+        <span class="dasi-item__q">Can you have sexual relations? <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="sexual_relations" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="sexual_relations" value="No" required> No</label>
+          <label class="option"><input type="radio" name="sexual_relations" value="N/A" required> N/A</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="moderate_recreation">
+        <span class="dasi-item__q">Can you participate in moderate recreational activities? <span class="dasi-item__eg">e.g. golf, dancing, throwing a ball</span> <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="moderate_recreation" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="moderate_recreation" value="No" required> No</label>
+        </div>
+      </div>
+      <div class="dasi-item" data-dasi-item="strenuous_sports">
+        <span class="dasi-item__q">Can you participate in strenuous sports? <span class="dasi-item__eg">e.g. swimming, singles tennis, football, basketball, skiing</span> <span class="req">*</span></span>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="strenuous_sports" value="Yes" required> Yes</label>
+          <label class="option"><input type="radio" name="strenuous_sports" value="No" required> No</label>
+        </div>
+      </div>
+
+      <div class="dasi-summary">
+        <div class="dasi-summary__stat">
+          <div class="dasi-summary__value" id="dasi-score">0.00</div>
+          <div class="dasi-summary__label">DASI Score (0–58.2)</div>
+        </div>
+        <div class="dasi-summary__stat">
+          <div class="dasi-summary__value" id="dasi-vo2">9.6</div>
+          <div class="dasi-summary__label">Est. VO₂ max (mL/kg/min)</div>
+        </div>
+        <div class="dasi-summary__stat">
+          <div class="dasi-summary__value" id="dasi-mets">2.7</div>
+          <div class="dasi-summary__label">Est. METs</div>
+        </div>
+      </div>
+      <p class="field__hint" style="margin-top: var(--space-3)">Decision-support estimate only — not a substitute for clinical judgment.</p>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Signature</h2>
+      <div class="field">
+        <label class="field__label" for="signature-canvas">Signature <span class="req">*</span></label>
+        <div class="sig-wrap">
+          <canvas id="signature-canvas" class="sig-canvas" data-sig-required="true"></canvas>
+          <div class="sig-actions">
+            <span class="sig-hint">Draw your signature above using your mouse or finger</span>
+            <button type="button" class="sig-clear" data-sig-clear="signature-canvas">Clear</button>
+          </div>
+        </div>
+        <p class="field__error">Please sign before submitting.</p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="date">Date</label>
+        <input class="input" type="date" id="date" name="date">
+      </div>
+      <div class="field">
+        <label class="option">
+          <input type="checkbox" name="is_guardian">
+          I am the parent/guardian of this patient
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn--ghost" data-print-form>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+        Print / Save as PDF
+      </button>
+      <button type="submit" class="btn btn--primary">Complete form</button>
+    </div>
+  </form>
+
+  <div class="form-success" data-form-success>
+    <svg class="form-success__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+    <h2 class="form-success__title">Form complete</h2>
+    <p class="form-success__desc">Use "Print / Save as PDF" to save a copy of your completed form, then deliver it to our office through your instructed secure method.</p>
+    <div class="form-actions" style="justify-content:center">
+      <button type="button" class="btn btn--primary" data-print-form>Print / Save as PDF</button>
+      <button type="button" class="btn btn--ghost" data-start-over>Start over</button>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  MAPS Healthcare Logistics, LLC · In the Mix Anesthesia · Questions? Call 913-298-6528
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+  // Conditional: anesthesia/family history free-text
+  window.MapsConditional(
+    'input[name="anesthesia_problems_past"], input[name="family_history_mh"]',
+    document.getElementById('anesthesia-family-details'),
+    () => {
+      const a = document.querySelector('input[name="anesthesia_problems_past"]:checked');
+      const b = document.querySelector('input[name="family_history_mh"]:checked');
+      return (a && a.value === 'Yes') || (b && b.value === 'Yes');
+    }
+  );
+
+  // DASI live scoring
+  window.MapsDasi(document.getElementById('paq-form'), {
+    self_care: 2.75,
+    walk_indoors: 1.75,
+    walk_1_2_blocks: 2.75,
+    climb_stairs_or_hill: 5.50,
+    run_short_distance: 8.00,
+    light_housework: 2.70,
+    moderate_housework: 3.50,
+    heavy_housework: 8.00,
+    yard_work: 4.50,
+    sexual_relations: 5.25,
+    moderate_recreation: 6.00,
+    strenuous_sports: 7.50
+  }, { score: 'dasi-score', vo2: 'dasi-vo2', mets: 'dasi-mets' });
+</script>
+</body>
+</html>
