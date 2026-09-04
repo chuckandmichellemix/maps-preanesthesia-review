@@ -1,0 +1,132 @@
+/* ===================================================================
+   Pre-Anesthesia Questionnaire — additional components
+   (loaded after style.css; extends the shared MAPS design tokens)
+   =================================================================== */
+
+/* ---------- Calculated (read-only, derived) values ---------- */
+.calc-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+@media (max-width: 720px) { .calc-row { grid-template-columns: repeat(2, 1fr); } }
+
+.calc-box {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-highlight);
+  border: 1px solid color-mix(in oklab, var(--color-primary) 30%, transparent);
+  text-align: center;
+}
+.calc-box__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-primary-active);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-1);
+}
+.calc-box__value {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+}
+.calc-box__value.is-empty { color: var(--color-text-faint); font-weight: 500; }
+
+/* ---------- Numeric roller pickers ---------- */
+.roller-group { margin-top: var(--space-3); }
+.roller-group__label {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-2);
+}
+.roller-pickers { display: flex; gap: var(--space-3); }
+
+.roller {
+  position: relative;
+  width: 84px;
+  height: 200px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  scrollbar-width: none;
+}
+.roller--wide { width: 110px; }
+.roller::-webkit-scrollbar { display: none; }
+
+.roller__track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.roller__item {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-text-faint);
+  user-select: none;
+  cursor: pointer;
+  transition: color 0.15s, font-size 0.15s;
+}
+.roller__item.is-selected {
+  color: var(--color-primary-active);
+  font-weight: 700;
+  font-size: var(--text-md);
+}
+
+.roller__window {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 40px;
+  margin-top: -20px;
+  border-top: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-primary-highlight);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.roller__fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 64px;
+  pointer-events: none;
+  z-index: 2;
+}
+.roller__fade--top {
+  top: 0;
+  background: linear-gradient(to bottom, var(--color-surface-2), transparent);
+}
+.roller__fade--bottom {
+  bottom: 0;
+  background: linear-gradient(to top, var(--color-surface-2), transparent);
+}
+
+.field__hint--error { color: var(--color-error); font-style: normal; }
+
+/* ---------- Age-based section visibility ---------- */
+[data-age-scope][hidden] { display: none; }
+.age-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--color-primary-highlight);
+  color: var(--color-primary-active);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+.age-banner.is-empty { display: none; }

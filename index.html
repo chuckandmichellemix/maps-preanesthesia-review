@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pre-Anesthesia Questionnaire | MAPS Clinical Forms</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/paq.css">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
@@ -50,15 +51,64 @@
   <form data-local-form novalidate id="paq-form">
 
     <div class="section">
-      <h2 class="section__title">Anthropometrics</h2>
+      <h2 class="section__title">Patient Information</h2>
+      <div class="field">
+        <label class="field__label" for="dob">Date of Birth <span class="req">*</span></label>
+        <input class="input" type="date" id="dob" name="date_of_birth" required>
+        <span class="field__hint" id="dob-hint">Used to tailor a couple of questions further down — nothing else changes.</span>
+        <span class="age-banner is-empty" id="age-banner"></span>
+      </div>
+      <div class="field" data-age-scope="pediatric" hidden id="parent-guardian-field">
+        <label class="field__label" for="parent_guardian_name">Parent/Guardian Full Name <span class="req">*</span></label>
+        <input class="input" type="text" id="parent_guardian_name" name="parent_guardian_name" placeholder="Full name of parent or legal guardian" autocomplete="off">
+        <span class="field__hint">Shown because the patient is under 18 — a parent or guardian completes this questionnaire on the patient's behalf.</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Physical Measurements</h2>
       <div class="field-row">
         <div class="field">
           <label class="field__label" for="height">Current Height <span class="req">*</span></label>
-          <input class="input" type="text" id="height" name="height" placeholder="e.g., 5 ft 8 in" required>
+          <input class="input" type="text" inputmode="decimal" id="height" name="height" placeholder="e.g., 5'8&quot;, 68, or 68in" required autocomplete="off">
+          <span class="field__hint" id="height-hint">Accepts 5'8", 5' 8, 68, or 68in</span>
+          <div class="roller-group">
+            <div class="roller-group__label">Or scroll to select</div>
+            <div class="roller-pickers">
+              <div class="roller" id="height-roller-ft" aria-label="Feet"></div>
+              <div class="roller" id="height-roller-in" aria-label="Inches"></div>
+            </div>
+          </div>
         </div>
         <div class="field">
           <label class="field__label" for="weight">Current Weight <span class="req">*</span></label>
-          <input class="input" type="text" id="weight" name="weight" placeholder="e.g., 165 lb" required>
+          <input class="input" type="text" inputmode="decimal" id="weight" name="weight" placeholder="e.g., 165 or 165 lb" required autocomplete="off">
+          <span class="field__hint" id="weight-hint">Accepts 165, 165 lb, or 165lbs</span>
+          <div class="roller-group">
+            <div class="roller-group__label">Or scroll to select</div>
+            <div class="roller-pickers">
+              <div class="roller roller--wide" id="weight-roller" aria-label="Weight in pounds"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-row">
+        <div class="calc-box">
+          <div class="calc-box__label">Height</div>
+          <div class="calc-box__value is-empty" id="calc-cm">—</div>
+        </div>
+        <div class="calc-box">
+          <div class="calc-box__label">Weight</div>
+          <div class="calc-box__value is-empty" id="calc-kg">—</div>
+        </div>
+        <div class="calc-box">
+          <div class="calc-box__label">BMI</div>
+          <div class="calc-box__value is-empty" id="calc-bmi">—</div>
+        </div>
+        <div class="calc-box">
+          <div class="calc-box__label">BSA (Mosteller)</div>
+          <div class="calc-box__value is-empty" id="calc-bsa">—</div>
         </div>
       </div>
     </div>
@@ -108,6 +158,134 @@
 
     <h2 style="font-size: var(--text-lg); margin: var(--space-8) 0 var(--space-2)">Past Medical History</h2>
     <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-5)">For each category, check every condition that applies, or "None of the above" if none apply.</p>
+
+    <div class="section">
+      <h2 class="section__title">Pulmonary History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="pulmonary-details">
+        <label class="checklist-item" for="pulmonary-home_oxygen_use">
+          <input type="checkbox" id="pulmonary-home_oxygen_use" name="pulmonary_options" value="Home Oxygen Use">
+          <span>Home Oxygen Use</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-copd">
+          <input type="checkbox" id="pulmonary-copd" name="pulmonary_options" value="COPD">
+          <span>COPD</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-recent_uri">
+          <input type="checkbox" id="pulmonary-recent_uri" name="pulmonary_options" value="Recent URI">
+          <span>Recent URI</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-tb">
+          <input type="checkbox" id="pulmonary-tb" name="pulmonary_options" value="TB">
+          <span>TB</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-snoring_sleep_apnea">
+          <input type="checkbox" id="pulmonary-snoring_sleep_apnea" name="pulmonary_options" value="Snoring/Sleep Apnea">
+          <span>Snoring/Sleep Apnea</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-cpap_use">
+          <input type="checkbox" id="pulmonary-cpap_use" name="pulmonary_options" value="CPAP Use">
+          <span>CPAP Use</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-asthma">
+          <input type="checkbox" id="pulmonary-asthma" name="pulmonary_options" value="Asthma">
+          <span>Asthma</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-cystic_fibrosis">
+          <input type="checkbox" id="pulmonary-cystic_fibrosis" name="pulmonary_options" value="Cystic Fibrosis">
+          <span>Cystic Fibrosis</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-pulmonary_fibrosis">
+          <input type="checkbox" id="pulmonary-pulmonary_fibrosis" name="pulmonary_options" value="Pulmonary Fibrosis">
+          <span>Pulmonary Fibrosis</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-sarcoidosis">
+          <input type="checkbox" id="pulmonary-sarcoidosis" name="pulmonary_options" value="Sarcoidosis">
+          <span>Sarcoidosis</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-pulmonary_hypertension">
+          <input type="checkbox" id="pulmonary-pulmonary_hypertension" name="pulmonary_options" value="Pulmonary Hypertension">
+          <span>Pulmonary Hypertension</span>
+        </label>
+        <label class="checklist-item" for="pulmonary-sob">
+          <input type="checkbox" id="pulmonary-sob" name="pulmonary_options" value="SOB">
+          <span>SOB</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="pulmonary-none">
+          <input type="checkbox" id="pulmonary-none" name="pulmonary_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="pulmonary-details" hidden>
+        <label class="field__label" for="pulmonary-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="pulmonary-details-text" name="pulmonary_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section__title">Cardiovascular History <span class="req">*</span></h2>
+      <div class="checklist" data-checklist data-conditional-target="cardiovascular-details">
+        <label class="checklist-item" for="cardiovascular-cad">
+          <input type="checkbox" id="cardiovascular-cad" name="cardiovascular_options" value="CAD">
+          <span>CAD</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-cabg">
+          <input type="checkbox" id="cardiovascular-cabg" name="cardiovascular_options" value="CABG">
+          <span>CABG</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-coronary_stents_intervention">
+          <input type="checkbox" id="cardiovascular-coronary_stents_intervention" name="cardiovascular_options" value="Coronary Stents/Intervention">
+          <span>Coronary Stents/Intervention</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-heart_valve_problems">
+          <input type="checkbox" id="cardiovascular-heart_valve_problems" name="cardiovascular_options" value="Heart Valve Problems">
+          <span>Heart Valve Problems</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-heart_valve_replacement">
+          <input type="checkbox" id="cardiovascular-heart_valve_replacement" name="cardiovascular_options" value="Heart Valve Replacement">
+          <span>Heart Valve Replacement</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-chf">
+          <input type="checkbox" id="cardiovascular-chf" name="cardiovascular_options" value="CHF">
+          <span>CHF</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-irregular_heart_beat">
+          <input type="checkbox" id="cardiovascular-irregular_heart_beat" name="cardiovascular_options" value="Irregular Heart Beat">
+          <span>Irregular Heart Beat</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-history_of_heart_attack">
+          <input type="checkbox" id="cardiovascular-history_of_heart_attack" name="cardiovascular_options" value="History of Heart Attack">
+          <span>History of Heart Attack</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-pacemaker">
+          <input type="checkbox" id="cardiovascular-pacemaker" name="cardiovascular_options" value="Pacemaker">
+          <span>Pacemaker</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-defibrillator">
+          <input type="checkbox" id="cardiovascular-defibrillator" name="cardiovascular_options" value="Defibrillator">
+          <span>Defibrillator</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-high_cholesterol">
+          <input type="checkbox" id="cardiovascular-high_cholesterol" name="cardiovascular_options" value="High Cholesterol">
+          <span>High Cholesterol</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-high_blood_pressure">
+          <input type="checkbox" id="cardiovascular-high_blood_pressure" name="cardiovascular_options" value="High Blood Pressure">
+          <span>High Blood Pressure</span>
+        </label>
+        <label class="checklist-item" for="cardiovascular-chest_pain_sob_during_activity">
+          <input type="checkbox" id="cardiovascular-chest_pain_sob_during_activity" name="cardiovascular_options" value="Chest Pain/SOB During Activity">
+          <span>Chest Pain/SOB During Activity</span>
+        </label>
+        <label class="checklist-item checklist-item--none" for="cardiovascular-none">
+          <input type="checkbox" id="cardiovascular-none" name="cardiovascular_options" value="None of the above" data-none-option>
+          <span>None of the above</span>
+        </label>
+      </div>
+      <div class="conditional" id="cardiovascular-details" hidden>
+        <label class="field__label" for="cardiovascular-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
+        <textarea class="textarea" id="cardiovascular-details-text" name="cardiovascular_details" data-conditional-required="true"></textarea>
+      </div>
+    </div>
 
     <div class="section">
       <h2 class="section__title">Neurological History <span class="req">*</span></h2>
@@ -242,134 +420,6 @@
       <div class="conditional" id="eent-details" hidden>
         <label class="field__label" for="eent-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="eent-details-text" name="eent_details" data-conditional-required="true"></textarea>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2 class="section__title">Pulmonary History <span class="req">*</span></h2>
-      <div class="checklist" data-checklist data-conditional-target="pulmonary-details">
-        <label class="checklist-item" for="pulmonary-home_oxygen_use">
-          <input type="checkbox" id="pulmonary-home_oxygen_use" name="pulmonary_options" value="Home Oxygen Use">
-          <span>Home Oxygen Use</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-copd">
-          <input type="checkbox" id="pulmonary-copd" name="pulmonary_options" value="COPD">
-          <span>COPD</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-recent_uri">
-          <input type="checkbox" id="pulmonary-recent_uri" name="pulmonary_options" value="Recent URI">
-          <span>Recent URI</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-tb">
-          <input type="checkbox" id="pulmonary-tb" name="pulmonary_options" value="TB">
-          <span>TB</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-snoring_sleep_apnea">
-          <input type="checkbox" id="pulmonary-snoring_sleep_apnea" name="pulmonary_options" value="Snoring/Sleep Apnea">
-          <span>Snoring/Sleep Apnea</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-cpap_use">
-          <input type="checkbox" id="pulmonary-cpap_use" name="pulmonary_options" value="CPAP Use">
-          <span>CPAP Use</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-asthma">
-          <input type="checkbox" id="pulmonary-asthma" name="pulmonary_options" value="Asthma">
-          <span>Asthma</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-cystic_fibrosis">
-          <input type="checkbox" id="pulmonary-cystic_fibrosis" name="pulmonary_options" value="Cystic Fibrosis">
-          <span>Cystic Fibrosis</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-pulmonary_fibrosis">
-          <input type="checkbox" id="pulmonary-pulmonary_fibrosis" name="pulmonary_options" value="Pulmonary Fibrosis">
-          <span>Pulmonary Fibrosis</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-sarcoidosis">
-          <input type="checkbox" id="pulmonary-sarcoidosis" name="pulmonary_options" value="Sarcoidosis">
-          <span>Sarcoidosis</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-pulmonary_hypertension">
-          <input type="checkbox" id="pulmonary-pulmonary_hypertension" name="pulmonary_options" value="Pulmonary Hypertension">
-          <span>Pulmonary Hypertension</span>
-        </label>
-        <label class="checklist-item" for="pulmonary-sob">
-          <input type="checkbox" id="pulmonary-sob" name="pulmonary_options" value="SOB">
-          <span>SOB</span>
-        </label>
-        <label class="checklist-item checklist-item--none" for="pulmonary-none">
-          <input type="checkbox" id="pulmonary-none" name="pulmonary_options" value="None of the above" data-none-option>
-          <span>None of the above</span>
-        </label>
-      </div>
-      <div class="conditional" id="pulmonary-details" hidden>
-        <label class="field__label" for="pulmonary-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
-        <textarea class="textarea" id="pulmonary-details-text" name="pulmonary_details" data-conditional-required="true"></textarea>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2 class="section__title">Cardiovascular History <span class="req">*</span></h2>
-      <div class="checklist" data-checklist data-conditional-target="cardiovascular-details">
-        <label class="checklist-item" for="cardiovascular-cad">
-          <input type="checkbox" id="cardiovascular-cad" name="cardiovascular_options" value="CAD">
-          <span>CAD</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-cabg">
-          <input type="checkbox" id="cardiovascular-cabg" name="cardiovascular_options" value="CABG">
-          <span>CABG</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-coronary_stents_intervention">
-          <input type="checkbox" id="cardiovascular-coronary_stents_intervention" name="cardiovascular_options" value="Coronary Stents/Intervention">
-          <span>Coronary Stents/Intervention</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-heart_valve_problems">
-          <input type="checkbox" id="cardiovascular-heart_valve_problems" name="cardiovascular_options" value="Heart Valve Problems">
-          <span>Heart Valve Problems</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-heart_valve_replacement">
-          <input type="checkbox" id="cardiovascular-heart_valve_replacement" name="cardiovascular_options" value="Heart Valve Replacement">
-          <span>Heart Valve Replacement</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-chf">
-          <input type="checkbox" id="cardiovascular-chf" name="cardiovascular_options" value="CHF">
-          <span>CHF</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-irregular_heart_beat">
-          <input type="checkbox" id="cardiovascular-irregular_heart_beat" name="cardiovascular_options" value="Irregular Heart Beat">
-          <span>Irregular Heart Beat</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-history_of_heart_attack">
-          <input type="checkbox" id="cardiovascular-history_of_heart_attack" name="cardiovascular_options" value="History of Heart Attack">
-          <span>History of Heart Attack</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-pacemaker">
-          <input type="checkbox" id="cardiovascular-pacemaker" name="cardiovascular_options" value="Pacemaker">
-          <span>Pacemaker</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-defibrillator">
-          <input type="checkbox" id="cardiovascular-defibrillator" name="cardiovascular_options" value="Defibrillator">
-          <span>Defibrillator</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-high_cholesterol">
-          <input type="checkbox" id="cardiovascular-high_cholesterol" name="cardiovascular_options" value="High Cholesterol">
-          <span>High Cholesterol</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-high_blood_pressure">
-          <input type="checkbox" id="cardiovascular-high_blood_pressure" name="cardiovascular_options" value="High Blood Pressure">
-          <span>High Blood Pressure</span>
-        </label>
-        <label class="checklist-item" for="cardiovascular-chest_pain_sob_during_activity">
-          <input type="checkbox" id="cardiovascular-chest_pain_sob_during_activity" name="cardiovascular_options" value="Chest Pain/SOB During Activity">
-          <span>Chest Pain/SOB During Activity</span>
-        </label>
-        <label class="checklist-item checklist-item--none" for="cardiovascular-none">
-          <input type="checkbox" id="cardiovascular-none" name="cardiovascular_options" value="None of the above" data-none-option>
-          <span>None of the above</span>
-        </label>
-      </div>
-      <div class="conditional" id="cardiovascular-details" hidden>
-        <label class="field__label" for="cardiovascular-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
-        <textarea class="textarea" id="cardiovascular-details-text" name="cardiovascular_details" data-conditional-required="true"></textarea>
       </div>
     </div>
 
@@ -773,6 +823,8 @@
 </footer>
 
 <script src="js/app.js"></script>
+<script src="js/roller.js"></script>
+<script src="js/paq.js"></script>
 <script>
   // Conditional: anesthesia/family history free-text
   window.MapsConditional(
