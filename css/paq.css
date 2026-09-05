@@ -100,7 +100,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  height: 64px;
+  height: 18px;
   pointer-events: none;
   z-index: 2;
 }
