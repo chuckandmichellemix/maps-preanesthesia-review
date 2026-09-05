@@ -74,9 +74,12 @@
           <span class="field__hint" id="height-hint">Accepts 5'8", 5' 8, 68, or 68in</span>
           <div class="roller-group">
             <div class="roller-group__label">Or scroll to select</div>
-            <div class="roller-pickers">
+            <div class="roller-pickers" id="height-roller-pickers-standard">
               <div class="roller" id="height-roller-ft" aria-label="Feet"></div>
               <div class="roller" id="height-roller-in" aria-label="Inches"></div>
+            </div>
+            <div class="roller-pickers" id="height-roller-pickers-infant" hidden>
+              <div class="roller roller--wide" id="height-roller-total-in" aria-label="Total inches"></div>
             </div>
           </div>
         </div>

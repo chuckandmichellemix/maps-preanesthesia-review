@@ -117,6 +117,7 @@
   let suppressRollerSync = false;
   let curFt = 5;
   let curIn = 8;
+  let curTotalIn = 32;
 
   function compute() {
     const inches = parseHeightToInches(heightInput.value);
@@ -134,11 +135,18 @@
       const ft = Math.floor(inches / 12);
       const rem = Math.round((inches - ft * 12) * 10) / 10;
       setBox(outCm, cm.toFixed(1) + ' cm \u00b7 ' + ft + "'" + rem + '"', false);
+      /* Always keep the tracking variables current, even for the roller mode
+         that isn't visible right now — otherwise switching age groups later
+         would show stale values. suppressRollerSync only skips re-pushing
+         setValue() into whichever roller just originated this change, to
+         avoid a redundant scroll-to-self. */
+      curFt = Math.min(Math.max(ft, 1), 8);
+      curIn = Math.min(Math.max(Math.round(inches - ft * 12), 0), 11);
+      curTotalIn = Math.min(Math.max(Math.round(inches), 12), 48);
       if (!suppressRollerSync) {
-        curFt = Math.min(Math.max(ft, 1), 8);
-        curIn = Math.min(Math.max(Math.round(inches - ft * 12), 0), 11);
         if (window.__mapsHeightRollerFt) window.__mapsHeightRollerFt.setValue(curFt, false);
         if (window.__mapsHeightRollerIn) window.__mapsHeightRollerIn.setValue(curIn, false);
+        if (window.__mapsHeightRollerTotalIn) window.__mapsHeightRollerTotalIn.setValue(curTotalIn, false);
       }
     } else {
       setBox(outCm, '\u2014', true);
@@ -192,8 +200,20 @@
 
   const ftEl = document.getElementById('height-roller-ft');
   const inEl = document.getElementById('height-roller-in');
+  const totalInEl = document.getElementById('height-roller-total-in');
   const wtEl = document.getElementById('weight-roller');
 
+  /* ---------- Under-3 height mode: single total-inches roller instead of feet+inches ---------- */
+  const standardPickers = document.getElementById('height-roller-pickers-standard');
+  const infantPickers = document.getElementById('height-roller-pickers-infant');
+
+  /* MapsRoller reads container.clientHeight at construction time to center its
+     track, and while a container is hidden (display:none) its scrollTop always
+     reads 0 — so any setValue()/scroll settle that happens while hidden can
+     silently snap the picker back to its minimum value or fire a stray
+     onChange. Guard each onChange so it's ignored unless its own picker group
+     is the one currently visible, and force a fresh setValue() right after a
+     group becomes visible so it reflects the authoritative curFt/curIn/curTotalIn. */
   if (ftEl && inEl && window.MapsRoller) {
     window.__mapsHeightRollerFt = window.MapsRoller(ftEl, {
       min: 1,
@@ -201,6 +221,7 @@
       value: curFt,
       suffix: "'",
       onChange: function (v) {
+        if (standardPickers && standardPickers.hidden) return;
         curFt = v;
         applyRollerHeight();
       }
@@ -211,11 +232,61 @@
       value: curIn,
       suffix: '"',
       onChange: function (v) {
+        if (standardPickers && standardPickers.hidden) return;
         curIn = v;
         applyRollerHeight();
       }
     });
   }
+
+  function applyRollerTotalIn() {
+    suppressRollerSync = true;
+    heightInput.value = curTotalIn + '"';
+    compute();
+    suppressRollerSync = false;
+  }
+
+  /* Built lazily, only once its container is actually visible (see comment above). */
+  function ensureTotalInRoller() {
+    if (window.__mapsHeightRollerTotalIn || !totalInEl || !window.MapsRoller) return;
+    window.__mapsHeightRollerTotalIn = window.MapsRoller(totalInEl, {
+      min: 12,
+      max: 48,
+      value: curTotalIn,
+      suffix: '"',
+      onChange: function (v) {
+        if (infantPickers && infantPickers.hidden) return;
+        curTotalIn = v;
+        applyRollerTotalIn();
+      }
+    });
+  }
+
+  function setHeightRollerMode(isInfantMode) {
+    if (standardPickers) standardPickers.hidden = isInfantMode;
+    if (infantPickers) infantPickers.hidden = !isInfantMode;
+    if (isInfantMode) {
+      ensureTotalInRoller();
+      if (window.__mapsHeightRollerTotalIn) window.__mapsHeightRollerTotalIn.setValue(curTotalIn, false);
+    } else {
+      if (window.__mapsHeightRollerFt) window.__mapsHeightRollerFt.setValue(curFt, false);
+      if (window.__mapsHeightRollerIn) window.__mapsHeightRollerIn.setValue(curIn, false);
+    }
+  }
+
+  document.addEventListener('maps:age-group-change', function (e) {
+    const age = e.detail && typeof e.detail.age === 'number' ? e.detail.age : null;
+    setHeightRollerMode(age !== null && age < 3);
+  });
+
+  /* Sync immediately in case DOB was already filled before this listener attached. */
+  (function syncInitialHeightRollerMode() {
+    const form = document.getElementById('paq-form');
+    const ageAttr = form ? form.getAttribute('data-patient-age') : null;
+    if (ageAttr !== null && ageAttr !== '') {
+      setHeightRollerMode(parseInt(ageAttr, 10) < 3);
+    }
+  })();
 
   if (wtEl && window.MapsRoller) {
     window.__mapsWeightRoller = window.MapsRoller(wtEl, {

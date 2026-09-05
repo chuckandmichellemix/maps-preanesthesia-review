@@ -43,6 +43,7 @@
   margin-bottom: var(--space-2);
 }
 .roller-pickers { display: flex; gap: var(--space-3); }
+.roller-pickers[hidden] { display: none; }
 
 .roller {
   position: relative;
