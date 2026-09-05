@@ -63,14 +63,25 @@ window.MapsRoller = function (container, opts) {
 
   let settleTimer = null;
   let ready = false;
+  /* setValue() (called whenever the linked text field is typed into, so the
+     picker visually tracks it) triggers this same native 'scroll' event.
+     Without a flag, the settle timeout below would fire onChange() ~130ms
+     later and write the roller's value straight back into the text field —
+     silently undoing whatever the person just typed/deleted unless they
+     cleared the whole field. suppressNextOnChange marks a scroll as
+     programmatic so its settle tick is skipped, while real touch/wheel/click
+     scrolls (which never go through setValue()) still fire onChange normally. */
+  let suppressNextOnChange = false;
   container.addEventListener(
     'scroll',
     function () {
       markSelected();
       clearTimeout(settleTimer);
+      const skipOnChange = suppressNextOnChange;
+      suppressNextOnChange = false;
       settleTimer = setTimeout(function () {
         const idx = markSelected();
-        if (ready) onChange(min + idx);
+        if (ready && !skipOnChange) onChange(min + idx);
       }, 130);
     },
     { passive: true }
@@ -88,6 +99,7 @@ window.MapsRoller = function (container, opts) {
 
   return {
     setValue: function (v, smooth) {
+      suppressNextOnChange = true;
       scrollToValue(v, smooth !== false);
       requestAnimationFrame(markSelected);
     }
