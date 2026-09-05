@@ -58,10 +58,17 @@
         <span class="field__hint" id="dob-hint">Used to tailor a couple of questions further down — nothing else changes.</span>
         <span class="age-banner is-empty" id="age-banner"></span>
       </div>
-      <div class="field" data-age-scope="pediatric" hidden id="parent-guardian-field">
-        <label class="field__label" for="parent_guardian_name">Parent/Guardian Full Name <span class="req">*</span></label>
-        <input class="input" type="text" id="parent_guardian_name" name="parent_guardian_name" placeholder="Full name of parent or legal guardian" autocomplete="off">
-        <span class="field__hint">Shown because the patient is under 18 — a parent or guardian completes this questionnaire on the patient's behalf.</span>
+      <div class="field-row" data-age-scope="pediatric" hidden id="parent-guardian-field">
+        <div class="field">
+          <label class="field__label" for="parent_guardian_name">Parent/Guardian Full Name <span class="req">*</span></label>
+          <input class="input" type="text" id="parent_guardian_name" name="parent_guardian_name" placeholder="Full name of parent or legal guardian" autocomplete="off">
+          <span class="field__hint">Shown because the patient is under 18 — a parent or guardian completes this questionnaire on the patient's behalf.</span>
+        </div>
+        <div class="field">
+          <label class="field__label" for="parent_guardian_phone">Primary Contact Phone Number <span class="req">*</span></label>
+          <input class="input" type="tel" inputmode="tel" id="parent_guardian_phone" name="parent_guardian_phone" placeholder="(555) 555-5555" autocomplete="off">
+          <span class="field__hint">Best number to reach the parent/guardian on the day of the procedure.</span>
+        </div>
       </div>
     </div>
 
@@ -149,7 +156,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" id="women-only-section">
       <h2 class="section__title">Women Only</h2>
       <p class="section__subtitle">If not applicable, leave blank.</p>
       <div class="option-group option-group--stack">
@@ -213,6 +220,32 @@
           <input type="checkbox" id="pulmonary-sob" name="pulmonary_options" value="SOB">
           <span>SOB</span>
         </label>
+        <label class="checklist-item" data-age-scope="pulm-under12" hidden for="pulmonary-smoke_exposure_home">
+          <input type="checkbox" id="pulmonary-smoke_exposure_home" name="pulmonary_options" value="Smoking exposure within the home">
+          <span>Smoking exposure within the home?</span>
+        </label>
+        <label class="checklist-item" data-age-scope="pulm-12plus" hidden for="pulmonary-smoking_vaping_history">
+          <input type="checkbox" id="pulmonary-smoking_vaping_history" name="pulmonary_options" value="Smoking/Vaping History" data-reveals="smoking_pack_years">
+          <span>Smoking/Vaping History</span>
+        </label>
+        <div class="subfield" id="smoking_pack_years" hidden style="grid-column: 1 / -1;">
+          <label class="field__label" for="smoking_pack_years-select">Pack-Years</label>
+          <select class="input" id="smoking_pack_years-select" name="smoking_pack_years">
+            <option value="">Select pack-years…</option>
+            <option value="Less than 5 pack-years">Less than 5 pack-years</option>
+            <option value="5–10 pack-years">5–10 pack-years</option>
+            <option value="10–20 pack-years">10–20 pack-years</option>
+            <option value="20–30 pack-years">20–30 pack-years</option>
+            <option value="30–40 pack-years">30–40 pack-years</option>
+            <option value="40+ pack-years">40+ pack-years</option>
+            <option value="Vaping only / not applicable">Vaping only / not applicable</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+        <label class="checklist-item" data-age-scope="pulm-12plus" hidden for="pulmonary-thc_illicit_drug_use">
+          <input type="checkbox" id="pulmonary-thc_illicit_drug_use" name="pulmonary_options" value="THC/Illicit Drug Use">
+          <span>THC/Illicit Drug Use</span>
+        </label>
         <label class="checklist-item checklist-item--none" for="pulmonary-none">
           <input type="checkbox" id="pulmonary-none" name="pulmonary_options" value="None of the above" data-none-option>
           <span>None of the above</span>
@@ -221,6 +254,10 @@
       <div class="conditional" id="pulmonary-details" hidden>
         <label class="field__label" for="pulmonary-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="pulmonary-details-text" name="pulmonary_details" data-conditional-required="true"></textarea>
+      </div>
+      <div class="field">
+        <label class="field__label" for="pulmonary-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="pulmonary-additional-details" name="pulmonary_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
       </div>
     </div>
 
@@ -287,6 +324,10 @@
       <div class="conditional" id="cardiovascular-details" hidden>
         <label class="field__label" for="cardiovascular-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="cardiovascular-details-text" name="cardiovascular_details" data-conditional-required="true"></textarea>
+      </div>
+      <div class="field">
+        <label class="field__label" for="cardiovascular-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="cardiovascular-additional-details" name="cardiovascular_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
       </div>
     </div>
 
@@ -370,6 +411,10 @@
         <label class="field__label" for="neurological-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="neurological-details-text" name="neurological_details" data-conditional-required="true"></textarea>
       </div>
+      <div class="field">
+        <label class="field__label" for="neurological-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="neurological-additional-details" name="neurological_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
+      </div>
     </div>
 
     <div class="section">
@@ -424,6 +469,10 @@
         <label class="field__label" for="eent-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="eent-details-text" name="eent_details" data-conditional-required="true"></textarea>
       </div>
+      <div class="field">
+        <label class="field__label" for="eent-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="eent-additional-details" name="eent_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
+      </div>
     </div>
 
     <div class="section">
@@ -453,6 +502,10 @@
       <div class="conditional" id="endocrine-details" hidden>
         <label class="field__label" for="endocrine-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="endocrine-details-text" name="endocrine_details" data-conditional-required="true"></textarea>
+      </div>
+      <div class="field">
+        <label class="field__label" for="endocrine-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="endocrine-additional-details" name="endocrine_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
       </div>
     </div>
 
@@ -487,6 +540,10 @@
       <div class="conditional" id="hepatic-details" hidden>
         <label class="field__label" for="hepatic-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="hepatic-details-text" name="hepatic_details" data-conditional-required="true"></textarea>
+      </div>
+      <div class="field">
+        <label class="field__label" for="hepatic-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="hepatic-additional-details" name="hepatic_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
       </div>
     </div>
 
@@ -526,6 +583,10 @@
         <label class="field__label" for="renal-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="renal-details-text" name="renal_details" data-conditional-required="true"></textarea>
       </div>
+      <div class="field">
+        <label class="field__label" for="renal-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="renal-additional-details" name="renal_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
+      </div>
     </div>
 
     <div class="section">
@@ -564,6 +625,10 @@
         <label class="field__label" for="gi-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="gi-details-text" name="gi_details" data-conditional-required="true"></textarea>
       </div>
+      <div class="field">
+        <label class="field__label" for="gi-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="gi-additional-details" name="gi_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
+      </div>
     </div>
 
     <div class="section">
@@ -597,6 +662,10 @@
       <div class="conditional" id="musculoskeletal-details" hidden>
         <label class="field__label" for="musculoskeletal-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="musculoskeletal-details-text" name="musculoskeletal_details" data-conditional-required="true"></textarea>
+      </div>
+      <div class="field">
+        <label class="field__label" for="musculoskeletal-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="musculoskeletal-additional-details" name="musculoskeletal_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
       </div>
     </div>
 
@@ -636,6 +705,10 @@
         <label class="field__label" for="heme_onc-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="heme_onc-details-text" name="heme_onc_details" data-conditional-required="true"></textarea>
       </div>
+      <div class="field">
+        <label class="field__label" for="heme_onc-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="heme_onc-additional-details" name="heme_onc_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
+      </div>
     </div>
 
     <div class="section">
@@ -665,6 +738,10 @@
       <div class="conditional" id="other_history-details" hidden>
         <label class="field__label" for="other_history-details-text">Please fill in below if you selected anything other than none of the above <span class="req">*</span></label>
         <textarea class="textarea" id="other_history-details-text" name="other_history_details" data-conditional-required="true"></textarea>
+      </div>
+      <div class="field">
+        <label class="field__label" for="other_history-additional-details">Additional Details (optional)</label>
+        <textarea class="textarea" id="other_history-additional-details" name="other_history_additional_details" placeholder="Anything else you'd like your anesthesia team to know about this section"></textarea>
       </div>
     </div>
 

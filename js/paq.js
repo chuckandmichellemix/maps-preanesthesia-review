@@ -9,7 +9,28 @@
   const banner = document.getElementById('age-banner');
   const guardianField = document.getElementById('parent-guardian-field');
   const guardianInput = document.getElementById('parent_guardian_name');
+  const guardianPhoneInput = document.getElementById('parent_guardian_phone');
+  const womenOnlySection = document.getElementById('women-only-section');
   if (!dob) return;
+
+  /* Generic helper for [data-age-scope="..."] groups that aren't a plain
+     field (e.g. checklist items): shows/hides matching elements, and when
+     hiding, unchecks any checkbox inside them via a real 'change' event so
+     dependent logic (None-of-the-above exclusivity, conditional "describe"
+     boxes, data-reveals sub-fields) all stay in sync. */
+  function setAgeScopeVisible(scopeValue, visible) {
+    document.querySelectorAll('[data-age-scope="' + scopeValue + '"]').forEach(function (el) {
+      el.hidden = !visible;
+      if (!visible) {
+        el.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
+          if (cb.checked) {
+            cb.checked = false;
+            cb.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+      }
+    });
+  }
 
   function calcAge(dobStr) {
     const d = new Date(dobStr + 'T00:00:00');
@@ -33,7 +54,11 @@
       if (guardianField) {
         guardianField.hidden = true;
         if (guardianInput) guardianInput.removeAttribute('required');
+        if (guardianPhoneInput) guardianPhoneInput.removeAttribute('required');
       }
+      if (womenOnlySection) womenOnlySection.hidden = false;
+      setAgeScopeVisible('pulm-under12', false);
+      setAgeScopeVisible('pulm-12plus', false);
       return;
     }
     form.setAttribute('data-patient-age', String(age));
@@ -52,7 +77,26 @@
           guardianInput.removeAttribute('required');
         }
       }
+      if (guardianPhoneInput) {
+        if (isPediatric) {
+          guardianPhoneInput.setAttribute('required', 'required');
+        } else {
+          guardianPhoneInput.removeAttribute('required');
+        }
+      }
     }
+
+    if (womenOnlySection) {
+      const hideWomenOnly = age < 12;
+      womenOnlySection.hidden = hideWomenOnly;
+      if (hideWomenOnly) {
+        const radios = womenOnlySection.querySelectorAll('input[name="women_only_status"]');
+        radios.forEach(function (r) { r.checked = false; });
+      }
+    }
+
+    setAgeScopeVisible('pulm-under12', age < 12);
+    setAgeScopeVisible('pulm-12plus', age >= 12);
 
     document.dispatchEvent(new CustomEvent('maps:age-group-change', { detail: { age: age, group: group } }));
   }
