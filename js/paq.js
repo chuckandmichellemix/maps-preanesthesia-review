@@ -6,12 +6,24 @@
 /* ---------- Date of Birth -> age (adult/pediatric flag) ---------- */
 (function () {
   const dob = document.getElementById('dob');
+  const genderSelect = document.getElementById('gender');
   const banner = document.getElementById('age-banner');
   const guardianField = document.getElementById('parent-guardian-field');
   const guardianInput = document.getElementById('parent_guardian_name');
   const guardianPhoneInput = document.getElementById('parent_guardian_phone');
   const womenOnlySection = document.getElementById('women-only-section');
   if (!dob) return;
+
+  function updateWomenOnlyVisibility(age) {
+    if (!womenOnlySection) return;
+    const isFemale = genderSelect && genderSelect.value === 'Female';
+    const eligible = age !== null && age >= 12 && isFemale;
+    womenOnlySection.hidden = !eligible;
+    if (!eligible) {
+      const radios = womenOnlySection.querySelectorAll('input[name="women_only_status"]');
+      radios.forEach(function (r) { r.checked = false; });
+    }
+  }
 
   /* Generic helper for [data-age-scope="..."] groups that aren't a plain
      field (e.g. checklist items): shows/hides matching elements, and when
@@ -56,7 +68,7 @@
         if (guardianInput) guardianInput.removeAttribute('required');
         if (guardianPhoneInput) guardianPhoneInput.removeAttribute('required');
       }
-      if (womenOnlySection) womenOnlySection.hidden = false;
+      updateWomenOnlyVisibility(null);
       setAgeScopeVisible('pulm-under12', false);
       setAgeScopeVisible('pulm-12plus', false);
       return;
@@ -86,14 +98,7 @@
       }
     }
 
-    if (womenOnlySection) {
-      const hideWomenOnly = age < 12;
-      womenOnlySection.hidden = hideWomenOnly;
-      if (hideWomenOnly) {
-        const radios = womenOnlySection.querySelectorAll('input[name="women_only_status"]');
-        radios.forEach(function (r) { r.checked = false; });
-      }
-    }
+    updateWomenOnlyVisibility(age);
 
     setAgeScopeVisible('pulm-under12', age < 12);
     setAgeScopeVisible('pulm-12plus', age >= 12);
@@ -103,6 +108,7 @@
 
   dob.addEventListener('change', apply);
   dob.addEventListener('input', apply);
+  if (genderSelect) genderSelect.addEventListener('change', apply);
   apply();
 })();
 
