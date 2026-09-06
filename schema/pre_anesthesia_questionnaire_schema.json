@@ -1,0 +1,643 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MAPS Pre-Anesthesia Questionnaire",
+  "description": "Standalone JSON Schema for the MAPS Pre-Anesthesia Questionnaire form, part of the MAPS Clinical Forms digitization handoff package. Field 'type' vocabulary: text, long_text, number, date, radio, checkbox_list, checkbox, signature. Schema updated to reflect the live form as of the September 2026 build: added gender field, gender+age gating on Women Only, per-section Additional Details free-text boxes, guardian phone field, and age-branched Pulmonary items.",
+  "source_pages": 7,
+  "definitions": {
+    "attestationBlock": {
+      "type": "object",
+      "description": "Shared attestation component used across forms",
+      "properties": {
+        "signature": {
+          "type": "string",
+          "description": "Captured electronic signature (image/base64 or e-sign provider reference)"
+        },
+        "signature_timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server-side capture timestamp for the signature (for audit trail, distinct from patient-entered date)"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "is_parent_guardian": {
+          "type": "boolean",
+          "default": false,
+          "description": "Checkbox: 'I am the parent/guardian of this patient'"
+        }
+      },
+      "required": [
+        "signature"
+      ]
+    },
+    "bodySystemHistoryBlock": {
+      "type": "object",
+      "description": "Reusable pattern: multi-select checkbox list ending in 'None of the above', mutually exclusive with other options, plus conditional free-text",
+      "properties": {
+        "selected_options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "Selected checkbox values from this category's option list; 'None of the above' is mutually exclusive with all other options"
+        },
+        "details": {
+          "type": "string",
+          "description": "Conditional long_text. Required if selected_options contains anything other than 'None of the above'. Label: 'Please fill in below if you selected anything other than none of the above.'"
+        }
+      },
+      "required": [
+        "selected_options"
+      ]
+    },
+    "dasiItem": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string",
+          "enum": [
+            "Yes",
+            "No"
+          ]
+        },
+        "weight_if_yes": {
+          "type": "number",
+          "description": "Fixed clinical MET weight applied if response is Yes; not user-editable"
+        }
+      },
+      "required": [
+        "response"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "Patient date of birth, captured as the first field on the form. The website UI computes age from this value and uses it to determine whether pediatric-specific fields (e.g. parent_guardian_name) are shown/required. JSON Schema cannot perform date arithmetic natively, so age-based branching is enforced in the form's client-side logic, not by this schema alone."
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Female",
+        "Male",
+        "Other"
+      ],
+      "description": "Patient gender, captured as the second field on the form (right after date_of_birth). Used together with age to gate the Women Only section: that section is only shown when gender = 'Female' AND age >= 12."
+    },
+    "parent_guardian_name": {
+      "type": "string",
+      "description": "Full name of the parent or legal guardian completing/co-signing the questionnaire on behalf of the patient.",
+      "x-conditional": {
+        "shown_when": "age_from(date_of_birth) < 18",
+        "required_when": "age_from(date_of_birth) < 18",
+        "enforced_by": "client-side form logic (js/paq.js), not this schema"
+      }
+    },
+    "parent_guardian_phone": {
+      "type": "string",
+      "description": "Primary contact phone number, shown next to Parent/Guardian Full Name.",
+      "x-conditional": {
+        "shown_when": "age_from(date_of_birth) < 18",
+        "required_when": "age_from(date_of_birth) < 18",
+        "enforced_by": "client-side form logic (js/paq.js), not this schema"
+      }
+    },
+    "height": {
+      "type": "string",
+      "description": "Current height; confirm unit (in/cm) with clinical team. Form UI accepts free text (e.g. 5'8\", 68, 68in) or a scroll-wheel feet/inches picker; both write to this same value."
+    },
+    "weight": {
+      "type": "string",
+      "description": "Current weight; confirm unit (lb/kg) with clinical team. Form UI accepts free text (e.g. 165, 165lb) or a scroll-wheel pounds picker; both write to this same value."
+    },
+    "anesthesia_problems_past": {
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ]
+    },
+    "family_history_malignant_hyperthermia": {
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ]
+    },
+    "anesthesia_family_history_details": {
+      "type": "string",
+      "description": "Conditional long_text; required if anesthesia_problems_past = Yes OR family_history_malignant_hyperthermia = Yes. Label: 'Please fill in below if you selected YES to any of the above.'"
+    },
+    "evaluated_by_pcp_last_year": {
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ]
+    },
+    "women_only_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "Pregnant or Chance of Pregnancy",
+        "Breastfeeding",
+        "Menopause/Hysterectomy",
+        null
+      ],
+      "description": "Single-select. Shown only when gender = 'Female' AND age_from(date_of_birth) >= 12; hidden and cleared otherwise.",
+      "x-conditional": {
+        "shown_when": "gender == 'Female' AND age_from(date_of_birth) >= 12",
+        "enforced_by": "client-side form logic (js/paq.js), not this schema"
+      }
+    },
+    "past_medical_history": {
+      "type": "object",
+      "description": "Each key is a body-system category using the bodySystemHistoryBlock pattern",
+      "properties": {
+        "neurological": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Epilepsy/Seizures",
+            "Stroke/TIA",
+            "Migraines",
+            "Alzheimer's/Dementia",
+            "MS",
+            "Muscular Dystrophy",
+            "Dizziness/Fainting/LOC",
+            "Numbness/Tingling",
+            "Facial/Leg/Arm Weakness",
+            "Chronic Pain",
+            "Autism",
+            "Anxiety/Panic Attacks",
+            "Depression",
+            "PTSD",
+            "ADHD",
+            "Suicidal Thoughts",
+            "Bi-Polar Disorder",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "neurological_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "eyes_ears_nose_throat": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Blurred Vision",
+            "Cataract(s)",
+            "Glaucoma",
+            "Macular Degeneration",
+            "TMJ",
+            "Sinus Problems/Deviated Septum",
+            "Loss of Hearing",
+            "Vocal Cord Injury/Paralysis history",
+            "Dry Eye",
+            "Double Vision",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "eent_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "pulmonary": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Home Oxygen Use",
+            "COPD",
+            "Recent URI",
+            "TB",
+            "Snoring/Sleep Apnea",
+            "CPAP Use",
+            "Asthma",
+            "Cystic Fibrosis",
+            "Pulmonary Fibrosis",
+            "Sarcoidosis",
+            "Pulmonary Hypertension",
+            "SOB",
+            "Smoking exposure within the home",
+            "Smoking/Vaping History",
+            "THC/Illicit Drug Use",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "pulmonary_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            },
+            "smoking_pack_years": {
+              "type": "string",
+              "enum": [
+                "Less than 5 pack-years",
+                "5–10 pack-years",
+                "10–20 pack-years",
+                "20–30 pack-years",
+                "30–40 pack-years",
+                "40+ pack-years",
+                "Vaping only / not applicable",
+                "Unknown"
+              ],
+              "description": "Shown inline when 'Smoking/Vaping History' is checked (age >= 12 only)."
+            }
+          },
+          "x-age-branched-options": {
+            "Smoking exposure within the home": "shown only when age_from(date_of_birth) < 12",
+            "Smoking/Vaping History": "shown only when age_from(date_of_birth) >= 12; selecting it reveals a required 'Pack-Years' select (smoking_pack_years)",
+            "THC/Illicit Drug Use": "shown only when age_from(date_of_birth) >= 12"
+          }
+        },
+        "cardiovascular": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "CAD",
+            "CABG",
+            "Coronary Stents/Intervention",
+            "Heart Valve Problems",
+            "Heart Valve Replacement",
+            "CHF",
+            "Irregular Heart Beat",
+            "History of Heart Attack",
+            "Pacemaker",
+            "Defibrillator",
+            "High Cholesterol",
+            "High Blood Pressure",
+            "Chest Pain/SOB During Activity",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "cardiovascular_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "endocrine": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Type 1 Diabetes",
+            "Type 2 Diabetes",
+            "Hypothyroidism",
+            "Hyperthyroidism",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "endocrine_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "hepatic": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Liver Disease",
+            "Cirrhosis",
+            "Hepatitis (indicate type)",
+            "Jaundice",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "hepatitis_type": {
+              "type": "string",
+              "description": "Shown inline when 'Hepatitis (indicate type)' is checked"
+            },
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "hepatic_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "renal": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Kidney Disease",
+            "Kidney Stones",
+            "Bladder/Urinary Incontinence",
+            "Kidney Transplant",
+            "Dialysis (indicate frequency)",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "dialysis_frequency": {
+              "type": "string",
+              "description": "Shown inline when 'Dialysis (indicate frequency)' is checked"
+            },
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "renal_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "gastrointestinal": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Ulcers",
+            "Trouble Swallowing",
+            "Hiatal Hernia",
+            "IBS",
+            "Crohn's Disease",
+            "GERD/Acid Reflux",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "gi_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "musculoskeletal": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Rheumatoid Arthritis",
+            "Osteoarthritis",
+            "Back Pain",
+            "Neck Pain",
+            "Other Muscle Problem/Disease",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "musculoskeletal_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "hematology_oncology": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "Previous/Current Cancer",
+            "Blood Clotting Disorder",
+            "Anemia",
+            "DVT",
+            "Pulmonary Embolism",
+            "Sickle Cell",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "heme_onc_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        },
+        "other_history": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/bodySystemHistoryBlock"
+            }
+          ],
+          "options_enum": [
+            "HIV",
+            "AIDS",
+            "Hepatitis (A, B, C)",
+            "MRSA (active)",
+            "None of the above"
+          ],
+          "sub_fields": {
+            "additional_details": {
+              "type": "string",
+              "form_field_name": "other_history_additional_details",
+              "description": "Optional free-text 'Additional Details' box shown at the bottom of this body-system section, independent of which checkboxes are selected."
+            }
+          }
+        }
+      },
+      "required": [
+        "neurological",
+        "eyes_ears_nose_throat",
+        "pulmonary",
+        "cardiovascular",
+        "endocrine",
+        "hepatic",
+        "renal",
+        "gastrointestinal",
+        "musculoskeletal",
+        "hematology_oncology",
+        "other_history"
+      ]
+    },
+    "dasi_functional_scoring": {
+      "type": "object",
+      "description": "Duke Activity Status Index — 12-item validated functional capacity screen. Weights are fixed clinical constants (see https://pmc.ncbi.nlm.nih.gov/articles/PMC9214434/); do not allow user edits to weight values.",
+      "properties": {
+        "self_care": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 2.75
+        },
+        "walk_indoors": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 1.75
+        },
+        "walk_1_2_blocks": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 2.75
+        },
+        "climb_stairs_or_hill": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 5.5
+        },
+        "run_short_distance": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 8.0
+        },
+        "light_housework": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 2.7
+        },
+        "moderate_housework": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 3.5
+        },
+        "heavy_housework": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 8.0
+        },
+        "yard_work": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 4.5
+        },
+        "sexual_relations": {
+          "type": "object",
+          "properties": {
+            "response": {
+              "type": "string",
+              "enum": [
+                "Yes",
+                "No",
+                "N/A"
+              ]
+            },
+            "weight_if_yes": {
+              "type": "number",
+              "const": 5.25
+            }
+          },
+          "required": [
+            "response"
+          ],
+          "description": "Only DASI item with a 3-way response (Yes/No/N/A). Exclude N/A from score calculation."
+        },
+        "moderate_recreation": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 6.0
+        },
+        "strenuous_sports": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/dasiItem"
+            }
+          ],
+          "default_weight": 7.5
+        },
+        "dasi_total_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 58.2,
+          "description": "Calculated field: sum of weight_if_yes across all 12 items answered Yes (N/A excluded)"
+        },
+        "estimated_vo2_max": {
+          "type": "number",
+          "description": "Calculated field: 0.43 * dasi_total_score + 9.6 (mL/kg/min)"
+        },
+        "estimated_mets": {
+          "type": "number",
+          "description": "Calculated field: estimated_vo2_max / 3.5"
+        }
+      },
+      "required": [
+        "self_care",
+        "walk_indoors",
+        "walk_1_2_blocks",
+        "climb_stairs_or_hill",
+        "run_short_distance",
+        "light_housework",
+        "moderate_housework",
+        "heavy_housework",
+        "yard_work",
+        "sexual_relations",
+        "moderate_recreation",
+        "strenuous_sports"
+      ]
+    },
+    "attestation": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/attestationBlock"
+        }
+      ],
+      "description": "Not explicitly present on source PDF beyond a date stamp — confirm with clinical/dev team whether to include full attestation block here (see FIELD_SPEC.md open questions)."
+    }
+  },
+  "required": [
+    "date_of_birth",
+    "height",
+    "weight",
+    "anesthesia_problems_past",
+    "family_history_malignant_hyperthermia",
+    "evaluated_by_pcp_last_year",
+    "past_medical_history",
+    "dasi_functional_scoring"
+  ]
+}
